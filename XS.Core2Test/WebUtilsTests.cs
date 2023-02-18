@@ -114,8 +114,10 @@ namespace XSCoreTest
         [TestMethod]
         public void GetHtml()
         {
-            string s = WebUtils.GetHtml("http://db.auto.sina.com.cn/");
-
+             
+            string url = "https://www.baidu.com";
+            string s = WebUtils.LoadURLStringGBK(url);
+            
             Console.WriteLine(s);
 
         }

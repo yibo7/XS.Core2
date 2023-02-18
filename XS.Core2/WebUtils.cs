@@ -12,9 +12,11 @@ namespace XS.Core2
     /// <summary>
     /// WebUtility : 基于System.Web的拓展类。
     /// </summary>
-    public class WebUtils
+   static public class WebUtils
     {
-
+        static WebUtils() {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
         /// <summary>
         /// 判断字符串是否为有效的URL地址
         /// </summary>
@@ -339,6 +341,27 @@ namespace XS.Core2
 
             return strResult;
         }
+        public static string LoadURLStringGBK(string url)
+        {
+            HttpWebRequest myWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse myWebResponse = (HttpWebResponse)myWebRequest.GetResponse();
+            Stream stream = myWebResponse.GetResponseStream();
+
+            string strResult = "";
+            StreamReader sr = new StreamReader(stream, Encoding.GetEncoding("gb2312"));
+            Char[] read = new Char[256];
+            int count = sr.Read(read, 0, 256);
+            int i = 0;
+            while (count > 0)
+            {
+                i += Encoding.GetEncoding("gb2312").GetByteCount(read, 0, 256);
+                String str = new String(read, 0, count);
+                strResult += str;
+                count = sr.Read(read, 0, 256);
+            }
+
+            return strResult;
+        }
         public static string LoadURLStringUTF8(string url)
         {
             HttpWebRequest myWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -346,7 +369,7 @@ namespace XS.Core2
             Stream stream = myWebResponse.GetResponseStream();
 
             string strResult = "";
-            StreamReader sr = new StreamReader(stream, System.Text.Encoding.GetEncoding("utf-8"));
+            StreamReader sr = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
             Char[] read = new Char[256];
             int count = sr.Read(read, 0, 256);
             int i = 0;

@@ -80,7 +80,7 @@ namespace XS.Core2
         /// </summary>
         /// <param name="programName">软件路径加名称（.exe文件）</param>
         public void RunProgram(string programName)
-        {
+        {            
             this.RunProgram(programName, "");
         }
 
