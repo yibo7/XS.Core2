@@ -46,6 +46,15 @@ namespace XS.Core2
           return int.Parse(dt_end.Subtract(dt_begin).TotalSeconds.ToString());
 
       }
+
+        static public long GetMilliSecond(DateTime dt)
+        {            
+            return long.Parse(NewOrderNumber(dt));
+        }
+        static public long GetMilliSecond()
+        {
+            return long.Parse(NewOrderNumber(DateTime.Now));
+        }
         private static object _SyncRoot = new object();
         /// <summary>
         /// 永远不会重复的订单号
@@ -82,6 +91,7 @@ namespace XS.Core2
             return NewOrderNumber(DateTime.Now);
 
         }
+
 
         static public string NewOrderNumber(DateTime dt)
         {
