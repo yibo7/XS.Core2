@@ -21,6 +21,7 @@ namespace XS.Core2
         public HtmlParse(string htmlOrUrl)
         {
             InitDoc(htmlOrUrl);
+            
         }
 
         /// <summary>

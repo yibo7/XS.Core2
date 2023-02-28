@@ -2893,6 +2893,55 @@ namespace XS.Core2
             return result;
         }
 
+        ///// <summary>
+        ///// 参数按照小写ASCII值升序排序
+        ///// </summary>
+        ///// <param name="message"></param>
+        ///// <param name="signFields"></param>
+        ///// <returns></returns>
+        //public static StringBuilder SortedDict(IDictionary<string, string> signFields)
+        //{
+
+        //    List<string> output = new List<string>(signFields.Count);
+
+        //    foreach (var pair in signFields)
+        //    {
+        //        // Ignore keys with empty values.
+        //        if (pair.Key != "sign" && !string.IsNullOrWhiteSpace(pair.Value))
+        //            output.Add(string.Concat(pair.Key, "=", pair.Value));
+        //    }
+        //    output.Sort(StringComparer.Ordinal);
+        //    // Concat all parameters together
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.Append(output[0]);
+        //    for (int i = 1; i < output.Count; i++)
+        //        sb.Append('&').Append(output[i]);
+
+        //    return sb;
+        //}
+        /// <summary>
+        /// 参数按照小写ASCII值升序排序
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static string SortParams(Dictionary<string, string> parameters)
+        {
+            // 将参数列表按照键的小写 ASCII 值进行升序排序
+            var sortedParams = parameters.OrderBy(p => p.Key.ToLower());
+
+            // 遍历排序后的参数列表，将每个键值对拼接成字符串，并用"&"符号连接起来
+            var paramList = new List<string>();
+            foreach (var param in sortedParams)
+            {
+                var encodedKey = HttpUtility.UrlEncode(param.Key);
+                var encodedValue = HttpUtility.UrlEncode(param.Value);
+                paramList.Add($"{encodedKey}={encodedValue}");
+            }
+
+            // 返回排序后的参数字符串
+            return string.Join("&", paramList);
+        }
+
 
 
 

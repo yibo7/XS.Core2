@@ -125,6 +125,28 @@ namespace XS.Core2.XsExtensions
             }
 
         }
+        /// <summary>
+        /// 将字符转换到对象
+        /// </summary>
+        /// <typeparam name="T">指定的对象类型</typeparam>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static T ToJson<T>(this string s) where T : class
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                throw new ArgumentNullException("s");
+            }
+
+            if (s == "null")
+            {
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<T>(s);
+        }
+
         public static JToken ToJsonJToken(this string str)
         {
             try
