@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using XS.Core2;
+using XS.Core2.WebHelper;
 
 namespace XS.Core2Test
 {
@@ -200,7 +201,7 @@ namespace XS.Core2Test
         public void RegexFinds()
         {
 
-            string s = XS.Core2.WebUtils.LoadURLString("http://www.beimai.com");
+            string s = WebUtils.LoadURLString("http://www.beimai.com");
 
             List<string> sv = XS.Core2.RegexBll.RegexFinds(@"((http|ftp|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?", s, 0);
             foreach (var v in sv)

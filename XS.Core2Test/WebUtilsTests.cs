@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using XS.Core2;
+using XS.Core2.WebHelper;
 
 namespace XSCoreTest
 {

@@ -7,14 +7,15 @@ using System.Text.RegularExpressions;
 using XS.Core2.FSO;
 using XS.Core2.Strings;
 
-namespace XS.Core2
+namespace XS.Core2.WebHelper
 {
     /// <summary>
     /// WebUtility : 基于System.Web的拓展类。
     /// </summary>
-   static public class WebUtils
+    static public class WebUtils
     {
-        static WebUtils() {
+        static WebUtils()
+        {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
         /// <summary>
@@ -97,7 +98,7 @@ namespace XS.Core2
 
 
             return iState;
-             
+
 
         }
 
@@ -211,7 +212,7 @@ namespace XS.Core2
 
             return size;
         }
-         
+
 
 
         #region 获取指定页面的内容    
@@ -229,7 +230,7 @@ namespace XS.Core2
             }
             return false;
         }
-         
+
         /// <summary>
         /// 此方法可以解决某些页面的乱码问题
         /// </summary>
@@ -239,21 +240,21 @@ namespace XS.Core2
         {
 
             string htmlCode;
-            HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
             webRequest.Timeout = 30000;
             webRequest.Method = "GET";
             webRequest.UserAgent = "Mozilla/4.0";
             webRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
 
-            HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse();
+            HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
             //获取目标网站的编码格式
             string contentype = webResponse.Headers["Content-Type"];
             Regex regex = new Regex("charset\\s*=\\s*[\\W]?\\s*([\\w-]+)", RegexOptions.IgnoreCase);
             if (webResponse.ContentEncoding.ToLower() == "gzip")//如果使用了GZip则先解压
             {
-                using (System.IO.Stream streamReceive = webResponse.GetResponseStream())
+                using (Stream streamReceive = webResponse.GetResponseStream())
                 {
-                   
+
                     using (Stream zipStream = new System.IO.Compression.GZipStream(streamReceive, System.IO.Compression.CompressionMode.Decompress))
                     {
                         //匹配编码格式
@@ -268,26 +269,26 @@ namespace XS.Core2
                                 if (ec.IndexOf("utf8") > -1 || ec.IndexOf("utf-8") > -1)
                                     ending = Encoding.UTF8;
                             }
-                            using (StreamReader sr = new System.IO.StreamReader(zipStream, ending))
+                            using (StreamReader sr = new StreamReader(zipStream, ending))
                             {
                                 htmlCode = sr.ReadToEnd();
                             }
                         }
                         else
                         {
-                            
-                            using (StreamReader sr = new System.IO.StreamReader(zipStream, Encoding.UTF8))
+
+                            using (StreamReader sr = new StreamReader(zipStream, Encoding.UTF8))
                             {
                                 htmlCode = sr.ReadToEnd();
                             }
                             if (isLuan(htmlCode))
                             {
-                                var data = new System.Net.WebClient { }.DownloadData(url); //再次执行，导致执行两次，以后优化
-                                var r_gbk = new System.IO.StreamReader(new System.IO.MemoryStream(data), Encoding.Default);
+                                var data = new WebClient { }.DownloadData(url); //再次执行，导致执行两次，以后优化
+                                var r_gbk = new StreamReader(new MemoryStream(data), Encoding.Default);
                                 htmlCode = r_gbk.ReadToEnd();
 
                             }
-                           
+
 
 
                         }
@@ -296,16 +297,16 @@ namespace XS.Core2
             }
             else
             {
-                using (System.IO.Stream streamReceive = webResponse.GetResponseStream())
+                using (Stream streamReceive = webResponse.GetResponseStream())
                 {
-                    using (System.IO.StreamReader sr = new System.IO.StreamReader(streamReceive, Encoding.UTF8))
+                    using (StreamReader sr = new StreamReader(streamReceive, Encoding.UTF8))
                     {
                         htmlCode = sr.ReadToEnd();
                     }
-                    if (isLuan(htmlCode)) 
+                    if (isLuan(htmlCode))
                     {
-                        var data = new System.Net.WebClient { }.DownloadData(url); //再次执行，导致执行两次，以后优化
-                        var r_gbk = new System.IO.StreamReader(new System.IO.MemoryStream(data), Encoding.Default);
+                        var data = new WebClient { }.DownloadData(url); //再次执行，导致执行两次，以后优化
+                        var r_gbk = new StreamReader(new MemoryStream(data), Encoding.Default);
                         htmlCode = r_gbk.ReadToEnd();
 
                     }
@@ -327,14 +328,14 @@ namespace XS.Core2
             Stream stream = myWebResponse.GetResponseStream();
 
             string strResult = "";
-            StreamReader sr = new StreamReader(stream, System.Text.Encoding.Default);//gb2312
-            Char[] read = new Char[256];
+            StreamReader sr = new StreamReader(stream, Encoding.Default);//gb2312
+            char[] read = new char[256];
             int count = sr.Read(read, 0, 256);
             int i = 0;
             while (count > 0)
             {
                 i += Encoding.UTF8.GetByteCount(read, 0, 256);
-                String str = new String(read, 0, count);
+                string str = new string(read, 0, count);
                 strResult += str;
                 count = sr.Read(read, 0, 256);
             }
@@ -349,13 +350,13 @@ namespace XS.Core2
 
             string strResult = "";
             StreamReader sr = new StreamReader(stream, Encoding.GetEncoding("gb2312"));
-            Char[] read = new Char[256];
+            char[] read = new char[256];
             int count = sr.Read(read, 0, 256);
             int i = 0;
             while (count > 0)
             {
                 i += Encoding.GetEncoding("gb2312").GetByteCount(read, 0, 256);
-                String str = new String(read, 0, count);
+                string str = new string(read, 0, count);
                 strResult += str;
                 count = sr.Read(read, 0, 256);
             }
@@ -370,13 +371,13 @@ namespace XS.Core2
 
             string strResult = "";
             StreamReader sr = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
-            Char[] read = new Char[256];
+            char[] read = new char[256];
             int count = sr.Read(read, 0, 256);
             int i = 0;
             while (count > 0)
             {
                 i += Encoding.UTF8.GetByteCount(read, 0, 256);
-                String str = new String(read, 0, count);
+                string str = new string(read, 0, count);
                 strResult += str;
                 count = sr.Read(read, 0, 256);
             }
@@ -395,7 +396,7 @@ namespace XS.Core2
             WebClient wc = new WebClient();
             wc.Credentials = CredentialCache.DefaultCredentials;
             byte[] pageData = wc.DownloadData(url);
-            return (Encoding.GetEncoding("gb2312").GetString(pageData));
+            return Encoding.GetEncoding("gb2312").GetString(pageData);
         }
 
         /// <summary>
@@ -413,7 +414,7 @@ namespace XS.Core2
             byte[] pageData = wc.UploadData(url, "POST", Encoding.Default.GetBytes(postData));
 
 
-            return (Encoding.GetEncoding("gb2312").GetString(pageData));
+            return Encoding.GetEncoding("gb2312").GetString(pageData);
         }
         #endregion
 
@@ -495,7 +496,7 @@ namespace XS.Core2
         }
         #endregion
 
-         
+
 
         /// <summary>
         /// HTMLs the decode.
@@ -536,7 +537,7 @@ namespace XS.Core2
         {
             return WebUtility.UrlEncode(urldata);
         }
-         
+
 
     }
 }
