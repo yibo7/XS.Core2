@@ -2942,7 +2942,16 @@ namespace XS.Core2
             return string.Join("&", paramList);
         }
 
-
+        static public void OpenUrlByDefaultBrowser(string url)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "cmd",
+                Arguments = $"/c start {url}",
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+        }
 
 
     }
