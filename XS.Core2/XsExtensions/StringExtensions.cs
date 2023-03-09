@@ -159,10 +159,39 @@ namespace XS.Core2.XsExtensions
             }
 
         }
+       
+        public static int ToInt(this string str,int defaultV=0)
+        {
+            return XsUtils.StrToInt(str, defaultV);
+        }
+ 
+        public static long ToLong(this string str, long defaultV=0)
+        {
+            return XsUtils.StrToLong(str, defaultV);
+        }
+        public static float ToFloat(this string str, float defaultV=0)
+        {
+            return XsUtils.StrToFloat(str, defaultV);
+        }
+        public static decimal ToDecimal(this string str, decimal defaultV = 0)
+        {
+            return XsUtils.StrToDecimal(str, defaultV);
+        }
+
+        public static bool ToBool(this string str, bool defaultV = false)
+        {
+            return XsUtils.StrToBool(str, defaultV);
+        }
+
+        public static DateTime StrToDate(this string str)
+        {
+            return XsUtils.StrToDate(str);
+        }
+
         //public static bool IsNullOrEmpty(this string str)
         //{
         //     return String.IsNullOrEmpty(str);
         //}
-        
+
     }
 }

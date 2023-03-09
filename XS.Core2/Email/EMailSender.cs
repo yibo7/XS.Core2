@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Text;
 
-namespace XS.Core.Email
+namespace XS.Core2.Email
 {
 
     /// <summary>
