@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using XS.Core2.WebHelper;
+using HtmlAgilityPack; 
 
 namespace XS.Core2
 {

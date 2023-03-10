@@ -6,8 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using XS.Core2.FSO;
 using XS.Core2.Strings;
+using static System.Net.Mime.MediaTypeNames;
 
-namespace XS.Core2.WebHelper
+namespace XS.Core2
 {
     /// <summary>
     /// WebUtility : 基于System.Web的拓展类。
@@ -496,7 +497,18 @@ namespace XS.Core2.WebHelper
         }
         #endregion
 
+        public static string PostForms(string url,Dictionary<string, string> dicPrams)
+        {
+            // 创建一个 HttpClient 实例
+            HttpClient client = new HttpClient();             
+            // 构造表单数据
+            var formContent = new FormUrlEncodedContent(dicPrams);
 
+            // 发起 POST 请求，并获取响应
+            HttpResponseMessage response = client.PostAsync(url, formContent).Result;
+
+            return response.Content.ReadAsStringAsync().Result;
+        }
 
         /// <summary>
         /// HTMLs the decode.
@@ -505,6 +517,7 @@ namespace XS.Core2.WebHelper
         /// <returns>System.String.</returns>
         public static string HtmlDecode(string html)
         {
+             
             return WebUtility.HtmlDecode(html);
         }
 
