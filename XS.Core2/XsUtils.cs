@@ -2953,6 +2953,56 @@ namespace XS.Core2
             });
         }
 
+        /// <summary>
+        /// 将记事本文本换行转换成HTML
+        /// </summary>
+        /// <param name="str">HTTML字符串</param>
+        /// <returns></returns>
+        public static string TextToHtml(string str)
+        {             
+            str = str.Replace("\n", "<br>");
+            str = str.Replace("\t", "<br>");
+            str = str.Replace("\r", "");
+            return str;
+        }
+
+
+        /// <summary>
+        /// 将记事本文本换行转换成的HTML
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <returns></returns>
+        public static string HtmlToText(string str)
+        {
+            str = str.Replace("<br>", "\n"); 
+            return str;
+        }
+        /// <summary>
+        /// 获取某个接口类型的所有实现类实例
+        /// </summary>
+        /// <typeparam name="T">接口类型，如 IJobXs</typeparam>
+        /// <returns></returns>
+        static public List<T> GetInstances<T>() where T : class
+        {
+            var tTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(T))))
+                .ToArray();
+            List<T> instanes = new List<T>();
+            foreach (var type in tTypes)
+            {
+                if (type.IsClass)
+                {
+                    T jobInst = Activator.CreateInstance(type) as T;
+                    if (!Equals(jobInst, null))
+                    {
+                        instanes.Add(jobInst);
+
+                    }
+                }
+            }
+            return instanes;
+        }
+
 
     }
 

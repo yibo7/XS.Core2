@@ -142,40 +142,7 @@ namespace XS.Core2.Strings
             }
             return strNew;
         }
-        /// <summary>
-        /// 对字符串进行 HTML 编码操作
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static string strEncode(string str)
-        {
-            str = str.Replace("&", "&amp;");
-            str = str.Replace("'", "''");
-            str = str.Replace("\"", "&quot;");
-            str = str.Replace(" ", "&nbsp;");
-            str = str.Replace("<", "&lt;");
-            str = str.Replace(">", "&gt;");
-            str = str.Replace("\n", "<br>");
-            str = str.Replace("\t", "<br>");
-            str = str.Replace("\r", "");
-            return str;
-        }
-
-
-        /// <summary>
-        /// 对 HTML 字符串进行解码操作
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static string strDecode(string str)
-        {
-            str = str.Replace("<br>", "\n");
-            str = str.Replace("&gt;", ">");
-            str = str.Replace("&lt;", "<");
-            str = str.Replace("&nbsp;", " ");
-            str = str.Replace("&quot;", "\"");
-            return str;
-        }
+        
 
         /// <summary>
         /// 对脚本程序进行处理

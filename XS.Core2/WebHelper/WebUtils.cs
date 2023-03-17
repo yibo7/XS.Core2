@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using XS.Core2.FSO;
 using XS.Core2.Strings;
 using static System.Net.Mime.MediaTypeNames;
@@ -496,7 +498,12 @@ namespace XS.Core2
             wc.Dispose();
         }
         #endregion
-
+        /// <summary>
+        /// 采用http form的方式post请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="dicPrams">参数，你可以这样创建：new Dictionary<string, string>{{ "key1", "value1" },{ "key2", "value2" }} </param>
+        /// <returns></returns>
         public static string PostForms(string url,Dictionary<string, string> dicPrams)
         {
             // 创建一个 HttpClient 实例
@@ -508,6 +515,57 @@ namespace XS.Core2
             HttpResponseMessage response = client.PostAsync(url, formContent).Result;
 
             return response.Content.ReadAsStringAsync().Result;
+        }
+        /// <summary>
+        /// 采用http form的方式post请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="dicPrams">参数，你可以这样创建：new Dictionary<string, string>{{ "key1", "value1" },{ "key2", "value2" }} </param>
+        /// <returns></returns>
+        public static T PostFormsBackObj<T>(string url, Dictionary<string, string> dicPrams)
+        {
+            // 创建一个 HttpClient 实例
+            HttpClient client = new HttpClient();
+            // 构造表单数据
+            var formContent = new FormUrlEncodedContent(dicPrams);
+
+            // 发起 POST 请求，并获取响应
+            HttpResponseMessage response = client.PostAsync(url, formContent).Result;
+
+            return response.Content.ReadFromJsonAsync<T>().Result;
+        }
+         
+
+        /// <summary>
+        /// 采用http content的方法post请求
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="Content">要post的内容</param>
+        /// <returns></returns>
+        public static  T PostContentBackObj<T>(string url, string Content)
+        {
+            // 创建HttpClient对象
+            HttpClient httpClient = new HttpClient(); 
+            
+            // 构造POST请求
+            HttpContent requestContent = new StringContent(Content);
+            HttpResponseMessage response =  httpClient.PostAsync(url, requestContent).Result;
+            // 读取响应数据
+            var obj =  response.Content.ReadFromJsonAsync<T>().Result;
+            return obj;
+        }
+        public static string PostContentBackStr(string url, string Content)
+        {
+            // 创建HttpClient对象
+            HttpClient httpClient = new HttpClient();
+
+            // 构造POST请求
+            HttpContent requestContent = new StringContent(Content);
+            HttpResponseMessage response =  httpClient.PostAsync(url, requestContent).Result;
+            // 读取响应数据
+            var obj =  response.Content.ReadAsStringAsync().Result;
+            return obj;
         }
 
         /// <summary>

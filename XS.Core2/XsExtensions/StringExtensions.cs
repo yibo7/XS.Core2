@@ -175,6 +175,11 @@ namespace XS.Core2.XsExtensions
         {
             return XsUtils.StrToDate(str);
         }
+        //public static string Concat(this string str,string newstr)
+        //{
+        //    return string.Concat(str, newstr);
+        //}
+        
 
         //public static bool IsNullOrEmpty(this string str)
         //{
