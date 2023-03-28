@@ -53,13 +53,15 @@ namespace XS.Core2.Encrypts
         /// <returns>MD5结果</returns>
         public static string MD5(string str)
         {
-            byte[] b = Encoding.Default.GetBytes(str);
-            b = new MD5CryptoServiceProvider().ComputeHash(b);
-            string ret = "";
-            for (int i = 0; i < b.Length; i++)
-                ret += b[i].ToString("x").PadLeft(2, '0');
+            byte[] bytes = Encoding.Default.GetBytes(str);
+            bytes = new MD5CryptoServiceProvider().ComputeHash(bytes);
+            string text = "";
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                text += bytes[i].ToString("x").PadLeft(2, '0');
+            }
 
-            return ret;
+            return text;
         }
 
         public static string MD5Obj(Object obj)
