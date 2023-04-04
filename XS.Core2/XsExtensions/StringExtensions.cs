@@ -34,9 +34,9 @@ namespace XS.Core2.XsExtensions
         {
             return Md5Helper.SHA256(strSoure);
         }
-        public static string Md5(this string strSoure)
+        public static string Md5(this string strSoure,string privateKey="")
         {
-            return Md5Helper.MD5(strSoure);
+            return Md5Helper.MD5($"{strSoure}{privateKey}");
         }
         /// <summary>
         /// 通过换行符号将字符串分割成数组
