@@ -8,7 +8,13 @@ namespace XS.Core2.Strings
 {
    public class Validate
     {
-       public static bool StringIsNullOrWhitespace(string value)
+        // 判断字符串是否包含汉字
+        public static bool ContainsChinese(string str)
+        {
+            Regex regex = new Regex("[\u4e00-\u9fa5]");
+            return regex.IsMatch(str);
+        }
+        public static bool StringIsNullOrWhitespace(string value)
        {
            return ((value == null) || (value.Trim().Length == 0));
        }

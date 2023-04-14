@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Net.Http;
 
 namespace XS.Core2
 {
@@ -174,6 +175,68 @@ namespace XS.Core2
                 g.Dispose();
             }
             return isok;
+        }
+
+        /// <summary>
+        /// 从中间位置裁切图片
+        /// </summary>
+        /// <param name="sPath">源乐谱的相对路径</param>
+        /// <returns></returns>
+        public static string CutPictureCenter(string SourePath,string targetPath,int height = 300, int width = 0)
+        {
+
+            string fullPath = SourePath;
+            //string targetPath = $"/scores/image/{Path.GetFileNameWithoutExtension(fullPath)}-small{Path.GetExtension(fullPath)}";
+            Image img = Image.FromFile(fullPath);
+            int y = img.Height / 2;
+            int iWidth = width;
+            if(width==0)
+            {
+                iWidth = img.Width;
+            }
+            img.Dispose();
+            CutPicture(fullPath, targetPath, 0, y, iWidth, height);
+            return targetPath;
+
+
+        }
+
+        /// 图片裁剪，生成新图
+        /// </summary>
+        /// <param name="picPath">要修改图片完整路径</param>
+        /// <param name="x">修改起点x坐标</param>
+        /// <param name="y">修改起点y坐标</param>
+        /// <param name="width">新图宽度</param>
+        /// <param name="height">新图高度</param>
+        public static void CutPicture(string sourePath, string targetPath, int x, int y, int width, int height)
+        {
+            //图片路径
+            //String oldPath = picPath;
+            //新图片路径
+            //String newPath = System.IO.Path.GetExtension(oldPath);
+            ////计算新的文件名，在旧文件名后加_new
+            //newPath = oldPath.Substring(0, oldPath.Length - newPath.Length) + "_small" + newPath;
+            //定义截取矩形
+            System.Drawing.Rectangle cropArea = new System.Drawing.Rectangle(x, y, width, height);
+            //要截取的区域大小
+            //加载图片
+            System.Drawing.Image img = System.Drawing.Image.FromStream(new System.IO.MemoryStream(System.IO.File.ReadAllBytes(sourePath)));
+            //判断超出的位置否
+            if ((img.Width < x + width) || img.Height < y + height)
+            {
+                img.Dispose();
+                throw new Exception("裁剪尺寸超出原有尺寸！");
+                //return;
+            }
+            //定义Bitmap对象
+            System.Drawing.Bitmap bmpImage = new System.Drawing.Bitmap(img);
+            //进行裁剪
+            System.Drawing.Bitmap bmpCrop = bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+            //保存成新文件
+            bmpCrop.Save(targetPath);
+            //释放对象
+            img.Dispose();
+            bmpCrop.Dispose();
         }
 
 
