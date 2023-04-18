@@ -41,6 +41,7 @@ namespace XS.Core2
         /// <returns>bool</returns>
         public static int ValidateUrl(string url, out string err)
         {
+            url = UrlEncodeCn(url);
             err = string.Empty;
             int iState;
             if (IsValidURL(url))
@@ -608,7 +609,15 @@ namespace XS.Core2
         {
             return WebUtility.UrlEncode(urldata);
         }
-
+        /// <summary>
+        /// EscapeUriString() 方法只会对 URL 中的非 ASCII 字符进行编码，包括中文字符。这意味着，http:// 这样的 ASCII 字符串不会被编码，而只有中文字符会被编码。
+        /// </summary>
+        /// <param name="urldata"></param>
+        /// <returns></returns>
+        public static string UrlEncodeCn(string urldata)
+        {
+            return Uri.EscapeUriString(urldata);
+        }
 
     }
 }

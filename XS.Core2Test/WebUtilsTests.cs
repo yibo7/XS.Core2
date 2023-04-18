@@ -1,5 +1,4 @@
 ﻿
-using XS.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,69 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using XS.Core2;
-using XS.Core2.WebHelper;
-
 namespace XSCoreTest
 {
     [TestClass]
     public class WebUtilsTests
     {
-        
-        public static string GetHtmlByJson(string url, string json = "")
-        {
-            var result = string.Empty;
-
-            try
-            {
-                var request = WebRequest.Create(url) as HttpWebRequest;
-                request.ContentType = "application/json";
-                request.Method = "POST";
-                //request.Headers.Add("nethash:b11fa2f2");
-                //request.Headers.Add("version:''");
-
-                //request.CookieContainer = _cookie;
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-
-                    var response = (HttpWebResponse)request.GetResponse();
-
-                    using (var reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        result = reader.ReadToEnd();
-                    }
-                }
-
-
-            }
-            catch (Exception uex)
-            {
-                // 出错处理
-                return uex.Message;
-            }
-
-            return result;
-        }
-        [TestMethod]
-        public void TestTrx()
-        {
-
-            for (int i = 23410355; i < 23410565; i++)
-            {
-                RunTimeWatch rt = new RunTimeWatch();
-                rt.start();
-                string s = GetHtmlByJson("http://47.242.72.203:8090/wallet/getblockbynum", "{ \"num\":23410355}");
-                Console.WriteLine(rt.elapsed());
-                //Console.WriteLine(s);
-            }
-
-
-
-        }
-
+          
         [TestMethod]
         public void PostTime()
         {
@@ -116,11 +58,20 @@ namespace XSCoreTest
         public void GetHtml()
         {
              
-            string url = "https://www.baidu.com";
-            string s = WebUtils.LoadURLStringGBK(url);
+            string url = "https://www.aitanqin.com";
+            string s = WebUtils.GetHtml(url);
             
             Console.WriteLine(s);
 
+        }
+        [TestMethod]
+        public void ValidateUrl()
+        {
+            string url = "https://www.aitanqin.com/Search.html?k=微光乐团&site=1";
+
+            string errinfo = "---";
+            int code = WebUtils.ValidateUrl(url, out errinfo);
+            Console.WriteLine(string.Format("状态码：{0},错误信息:{1}", code, errinfo));
         }
 
     }

@@ -1,11 +1,4 @@
 ﻿
-using XS.Core;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using XS.Core2;
 
 namespace XSCoreTest
