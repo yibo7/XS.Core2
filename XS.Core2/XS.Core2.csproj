@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<VersionPrefix>2.0.5</VersionPrefix>
+	<VersionPrefix>2.0.6</VersionPrefix>
     <AssemblyTitle>XS.Core2 DLL</AssemblyTitle>
     <AssemblyDescription>XS.Core帮助类库</AssemblyDescription>
     <PackageOutputPath>D:\web\MyNugetLibs</PackageOutputPath>

@@ -2,12 +2,64 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Net.Http;
 
 namespace XS.Core2
 {
     public class ImagesMake
     {
+        /// <summary>
+        /// 在图片的右下角添加文字水印
+        /// </summary>
+        /// <param name="textMark">文字</param>
+        /// <param name="SourcePath">图片源文件</param>
+        /// <param name="SavePath">保存目录</param>
+      static public bool AddTxtMark(string SourcePath, string SavePath, string textMark)
+        {
+            bool isok = false;
+            try
+            {
+                Image image = Image.FromFile(SourcePath);
+                if (!image.RawFormat.Equals(ImageFormat.Gif)) //不支持gif
+                {
+                    //Bitmap image = new Bitmap(SourcePath);
+                    Graphics graphics = Graphics.FromImage(image);
+                    Font font = new Font("Arial", 16, FontStyle.Bold);
+                    int alpha = XS.Core2.XsUtils.GetRandNum(50, 30);
+                    SolidBrush brush = new SolidBrush(Color.FromArgb(alpha, 255, 0, 0));
+                    // 计算水印文字的宽度和高度
+                    SizeF textSize = graphics.MeasureString(textMark, font);
+
+                    // 在图片右下角留出 20 像素的边距
+                    float x = image.Width - textSize.Width;
+                    float y = image.Height - textSize.Height;
+
+                    // 旋转45度角
+                    Matrix matrix = new Matrix();
+                    matrix.RotateAt(-45, new PointF(x, y));
+                    graphics.Transform = matrix;
+
+                    graphics.DrawString(textMark, font, brush, x, y);
+                    string extension = Path.GetExtension(SourcePath);
+
+                    image.Save(SavePath);
+                    // 释放资源
+                    graphics.Dispose();
+                    
+                    isok = true;
+                }
+                image.Dispose();
+
+            }
+            catch (Exception)
+            {
+                 
+            }
+
+            return isok;
+            
+        }
         /// <summary>创建规定大小的图像    /// 源图像只能是JPG格式   
         /// </summary>   
         /// <param name="oPath">源图像绝对路径</param>   
