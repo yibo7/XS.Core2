@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 // 如果此项目向 COM 公开，则下列 GUID 用于 typelib 的 ID。
 
 [assembly: Guid("257cc90b-aedb-4077-a39f-f6007d40c2b1")]
-[assembly: log4net.Config.XmlConfigurator(ConfigFile = "conf/log4net.config")]
+//[assembly: log4net.Config.XmlConfigurator(ConfigFile = "conf/log4net.config")]

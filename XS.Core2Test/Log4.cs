@@ -1,16 +1,14 @@
-
 using XS.Core2;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace XS.Core2Test
 {
     [TestClass]
-    public class Log4
+    public class Log4Test
     {
         [TestMethod]
         public void TestLogInfo()
         {
-            LogHelper.Write("fffffff");
+            LogHelper.Error<Log4Test>("8888888");
             Console.WriteLine("testdddd");
         }
     }

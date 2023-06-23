@@ -1,72 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using log4net.Config;
+using log4net;
+using System.Reflection;
+using System.Xml;
 
 namespace XS.Core2
 {
-    public class LogHelper
+    static public class LogHelper
     {
-        private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
-
-        private static object thisLock = new object();
-        /// <summary>
-        /// 将内容记录到info
-        /// 客户端调用写法如下：LogHelp.WriteLog("123");  
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="realWriteLog"></param>
-        public static void Write(string info, bool realWriteLog = true)
+        static LogHelper()
         {
-            lock (thisLock)
-            {
-                if (realWriteLog)
-                {
-                    if (loginfo.IsInfoEnabled)
-                    {
-                        loginfo.Info(info);
-                    }
-                }
-            }
+            XmlDocument log4netConfig = new XmlDocument();
+            log4netConfig.Load(File.OpenRead("conf/log4net.config"));
+
+            var repo = LogManager.CreateRepository(
+                Assembly.GetEntryAssembly(),
+                typeof(log4net.Repository.Hierarchy.Hierarchy));
+
+            XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
+            //log4net.Config.XmlConfigurator.Configure();
+
+        }
+        //private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
+         
+        public static void Info<T>(string info)
+        {
+            // 获取一个日志记录器
+            ILog logger = LogManager.GetLogger(typeof(T));
+            logger.Info(info);
+
+        }
+        public static void Error<T>(string err)
+        { 
+            ILog logger = LogManager.GetLogger(typeof(T));
+            logger.Error(err);
+
+        }
+        public static void Debug<T>(string msg)
+        { 
+            ILog logger = LogManager.GetLogger(typeof(T));
+            logger.Debug(msg);
         }
 
+        [Obsolete("此方法即可弃用，请使用Info(string info)替换")]
+        public static void Write(string info)
+        {
+            ILog logger = LogManager.GetLogger("loginfo");
+            logger.Info(info);
+        }
 
-        /// <summary>
-        /// 将内容记录到error
-        /// 客户端调用写法如下：LogHelp.WriteLog("456",new Exception ("错误"));
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="se"></param>
-        /// <param name="realWriteLog"></param>
-        public static void Write(string info, Exception se, bool realWriteLog = true)
-        {
-            lock (thisLock)
-            {
-                if (realWriteLog)
-                {
-                    if (loginfo.IsInfoEnabled)
-                    {
-                        loginfo.Info(info, se);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// 日志保留多少天
-        /// </summary>
-        /// <param name="logFilePath"></param>
-        /// <param name="saveDays"></param>
-        public static void SaveLogDays(string logFilePath, int saveDays)
-        {
-            lock (thisLock)
-            {
-                string[] logFileName = Directory.GetFiles(logFilePath);
-                if (logFileName.Count() > saveDays)
-                {
-                    File.Delete(logFileName[0]);
-                }
-            }
-        }
     }
 }

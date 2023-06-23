@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,6 +17,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XS.Core2\XS.Core2.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="conf\log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
