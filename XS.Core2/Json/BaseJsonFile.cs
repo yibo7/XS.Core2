@@ -20,7 +20,7 @@ namespace XS.Core2.Json
         protected BaseJsonFile(string filePath)
         {
             _filePath = filePath;
-            if (File.Exists(_filePath))
+            if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(_filePath))
             {
                 var json = File.ReadAllText(_filePath);
                 JsonConvert.PopulateObject(json, this);
@@ -29,8 +29,16 @@ namespace XS.Core2.Json
 
         public void Save()
         {
-            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            File.WriteAllText(_filePath, json, Encoding.UTF8);
+            if (!string.IsNullOrWhiteSpace(_filePath) && File.Exists(_filePath))
+            {
+                var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+                File.WriteAllText(_filePath, json, Encoding.UTF8);
+            }
+            else
+            {
+                LogHelper.Debug<BaseJsonFile>("保存json文件出错：json文件的路径为空！");
+            }
+
         }
     }
 }
