@@ -7,7 +7,7 @@ using XS.Core2.FSO;
 
 namespace XS.Core2
 {
-
+    [Obsolete("这个类已经过时. 请使用BaseJsonFile替换.", true)]
     public class JsonFile<T>  where T: class, new ()   
     {
 
@@ -21,7 +21,7 @@ namespace XS.Core2
             if (FObject.IsExist(sPath, FsoMethod.File))
             {
                 string json = FObject.ReadFile(sPath);
-                Inst =  JsonConvert.DeserializeObject<T>(json);
+                Inst = JsonConvert.DeserializeObject<T>(json);
                 Id = XsUtils.MD5(sPath);
             }
             else

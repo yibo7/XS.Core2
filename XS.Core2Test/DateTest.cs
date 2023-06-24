@@ -15,6 +15,8 @@ namespace XS.Core2Test
         {
             long d_span = DateUtils.DateDiff("day", DateTime.Parse("2022/1/19"), DateTime.Now.Date);
             Console.WriteLine($"返回的天数:{d_span}");
+
+             
         }
     }
 }
