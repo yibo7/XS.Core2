@@ -18,16 +18,7 @@ namespace XSCoreTest
             string s = SqlDateTimeInt.NewOrderNumberSleep();
             Console.WriteLine(s);
 
-        }
-        [TestMethod]
-        public void Post()
-        {
-            string sUrl = "http://appapi.beimai.com/Api/Ask/AddQuestionAndAnswer";
-            string args = "{\"title\":\"ddffdsfsdfsfsfs\",\"content\":\"dddddd\",\"answercontent\":\"ccccc\",\"isapproved\":\"0\"} ";
-            string sPostData = string.Concat(sUrl, "?p=", UrlEncode(args));
-            string s = Post(sPostData);
-            Console.WriteLine(s);
-        }
+        } 
         public string UrlEncode(string str)
         {
             StringBuilder sb = new StringBuilder();
@@ -37,22 +28,7 @@ namespace XSCoreTest
                 sb.Append(@"%" + Convert.ToString(byStr[i], 16));
             }
             return (sb.ToString());
-        }
-        string Post(string url)
-        {
-            string result = "";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            req.Method = "POST";
-            req.Headers.Add("BMsessionid", "-1");
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
-            //获取内容  
-            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                result = reader.ReadToEnd();
-            }
-            return result;
-        }
+        } 
          
         [TestMethod]
         public void GetHtml()

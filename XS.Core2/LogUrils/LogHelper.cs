@@ -9,15 +9,21 @@ namespace XS.Core2
     {
         static LogHelper()
         {
-            XmlDocument log4netConfig = new XmlDocument();
-            log4netConfig.Load(File.OpenRead("conf/log4net.config"));
+            string ConfigPath = "conf/log4net.config";
+            if (File.Exists(ConfigPath))
+            {
+                XmlDocument log4netConfig = new XmlDocument();
+                log4netConfig.Load(File.OpenRead(ConfigPath));
 
-            var repo = LogManager.CreateRepository(
-                Assembly.GetEntryAssembly(),
-                typeof(log4net.Repository.Hierarchy.Hierarchy));
+                var repo = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
 
-            XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
-            //log4net.Config.XmlConfigurator.Configure();
+                XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
+            }
+            else
+            {
+                throw new Exception("调用了日志操作方法，但没有配置log4配置文件，请在项目目录下创建conf/log4net.config");
+            }
+                
 
         }
         //private static readonly log4net.ILog loginfo = log4net.LogManager.GetLogger("loginfo");
