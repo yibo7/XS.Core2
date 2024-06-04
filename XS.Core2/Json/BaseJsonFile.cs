@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace XS.Core2.Json
 {
     /// <summary>
-    /// 处理json文件，可以继承这个基类扩展配置字希
+    /// 处理json文件，可以继承这个基类扩展配置字段
     /// </summary>
     public class BaseJsonFile
     {

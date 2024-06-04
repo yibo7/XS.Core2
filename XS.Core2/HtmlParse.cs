@@ -12,7 +12,7 @@ namespace XS.Core2
     /// </summary>
     public class HtmlParse
     {
-        private readonly HtmlDocument doc = new HtmlDocument();
+        public readonly HtmlDocument doc = new HtmlDocument();
 
         /// <summary>
         /// 构造函数 初始化文档并解析 默认utf-8模式

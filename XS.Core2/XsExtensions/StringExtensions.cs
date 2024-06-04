@@ -15,6 +15,11 @@ namespace XS.Core2.XsExtensions
 {
     public static class StringExtensions
     {
+        //// 保留多少个字符
+        //public static string Cut(this string value, int maxLength)
+        //{
+        //    return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        //}
         public static string ToBase64(this string strSoure)
         {
             byte[] bytesToEncode = Encoding.UTF8.GetBytes(strSoure); // 将字符串转换为byte数组
@@ -85,9 +90,9 @@ namespace XS.Core2.XsExtensions
         /// <param name="strSoure"></param>
         /// <param name="length">要截取的长度</param> 
         /// <returns></returns>
-        public static string CutStrLen(this string strSoure, int length)
+        public static string CutStrLen(this string value, int maxLength)
         {
-            return GetString.GetSubString(strSoure, length,"...");
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
         /// <summary>
         /// 截取过长的字符
