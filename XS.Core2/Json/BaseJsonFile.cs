@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XS.Core2.FSO;
 
 namespace XS.Core2.Json
 {
@@ -20,11 +22,19 @@ namespace XS.Core2.Json
         protected BaseJsonFile(string filePath)
         {
             _filePath = filePath;
-            if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(_filePath))
+
+            if(string.IsNullOrWhiteSpace(filePath))
+                return;
+
+            if (File.Exists(_filePath))
             {
                 var json = File.ReadAllText(_filePath);
                 JsonConvert.PopulateObject(json, this);
-            }
+            }else
+            {
+                FObject.WriteFileUtf8(_filePath, "{}");
+            } 
+            
         }
 
         public void Save()

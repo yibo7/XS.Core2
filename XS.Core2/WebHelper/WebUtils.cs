@@ -240,7 +240,7 @@ namespace XS.Core2
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>System.String.</returns>
-        public static string GetHtml(string url)
+        public static string GetHtml(string url,Dictionary<string,string>? Headers = null)
         {
 
             string htmlCode;
@@ -249,6 +249,14 @@ namespace XS.Core2
             webRequest.Method = "GET";
             webRequest.UserAgent = "Mozilla/4.0";
             webRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
+
+            if(Headers != null)
+            {
+                foreach (var item in Headers)
+                {
+                    webRequest.Headers.Add(item.Key, item.Value);
+                }
+            }
 
             HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
             //获取目标网站的编码格式

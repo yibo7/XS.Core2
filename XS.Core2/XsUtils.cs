@@ -2044,7 +2044,10 @@ namespace XS.Core2
         {
             return ObjectToInt(expression, 0);
         }
-
+        public static string ObjectToStr(object expression)
+        {
+            return Equals(expression,null)?"": expression.ToString();
+        }
         /// <summary>
         /// 将对象转换为Int32类型
         /// </summary>
