@@ -35,7 +35,7 @@ namespace XS.Core2
         private string _fileName;           //文件名
         private string _savePath;           //保存路径
         private short _threadCompleteNum;   //线程完成数量
-        private bool _isComplete;           //是否完成
+        private bool _isComplete = false;           //是否完成
         private volatile int _downloadSize; //当前下载大小
         private Thread[] _thread;           //线程数组
         private List<string> _tempFiles = new List<string>();
@@ -110,6 +110,8 @@ namespace XS.Core2
             this._thread = new Thread[threahNum];
             this._fileUrl = fileUrl;
             this._savePath = savePath;
+
+            FSO.FObject.ExistsDirectory(_savePath);
         }
 
         public void Start()

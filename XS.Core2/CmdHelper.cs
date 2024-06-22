@@ -12,27 +12,28 @@ namespace XS.Core2
     /// </summary>
     public class CmdHelper
     {
-        private Process proc = null;
+        //private Process proc = null;
         /// <summary>
         /// 构造方法
         /// </summary>
-        public CmdHelper()
-        {
-            proc = new Process();
-        }
+        //public CmdHelper()
+        //{
+        //    proc = new Process();
+        //}
 
         /// <summary>
         /// 执行CMD语句
         /// </summary>
         /// <param name="cmd">要执行的CMD命令</param>
-        public string RunCmd(string cmd)
+        static public string RunCmd(string cmd)
         {
             List<string> cmds = new List<string>();
             cmds.Add(cmd);
             return RunCmd(cmds);
         }
-        public string RunCmd(List<string> cmds)
+        static public string RunCmd(List<string> cmds)
         {
+            Process proc = new Process();
             proc.StartInfo.CreateNoWindow = true;
             proc.StartInfo.FileName = "cmd.exe";
             proc.StartInfo.UseShellExecute = false;
@@ -59,9 +60,10 @@ namespace XS.Core2
         /// </summary>
         /// <param name="programName">软件路径加名称（.exe文件）</param>
         /// <param name="cmd">要执行的命令</param>
-        public void RunProgram(string programName, string cmd)
+        static public void RunProgram(string programName, string cmd)
         {
             Process proc = new Process();
+            //Process proc = new Process();
             proc.StartInfo.CreateNoWindow = true;
             proc.StartInfo.FileName = programName;
             proc.StartInfo.UseShellExecute = false;
@@ -79,9 +81,9 @@ namespace XS.Core2
         /// 打开软件
         /// </summary>
         /// <param name="programName">软件路径加名称（.exe文件）</param>
-        public void RunProgram(string programName)
+        static public void RunProgram(string programName)
         {            
-            this.RunProgram(programName, "");
+            RunProgram(programName, "");
         }
 
         /// <summary>
@@ -89,7 +91,7 @@ namespace XS.Core2
         /// </summary>
         /// <param name="serviceName">要检测的服务名称</param>
         /// <returns>存在true，不存在false</returns>
-        public bool CheckService(string serviceName)
+        static public bool CheckService(string serviceName)
         {
             bool bCheck = false;
 
@@ -106,6 +108,82 @@ namespace XS.Core2
                 }
             }
             return bCheck;
+        }
+        /// <summary>
+        /// 使用默认浏览器打开连接
+        /// </summary>
+        /// <param name="sUrl"></param>
+        static public void OpenUrl(string sUrl)
+        {
+            // 启动默认浏览器并打开指定的URL
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = sUrl,
+                UseShellExecute = true // 这允许使用操作系统的功能来打开链接
+            });
+        }
+
+        /// <summary>
+        /// 执行cmd命令，并返回结果
+        /// </summary>
+        /// <param name="BackFun">返回执行过程中的消息</param>
+        /// <param name="Arguments">要执行的命令</param>
+        /// <param name="exePath">要打开的exe文件路径，可以是相对路径，比如@".\\ffmpeg\\ffmpeg.exe" </param>
+        /// <returns></returns>
+        static public string Run(Action<string> BackFun,string Arguments,string exePath = "")
+        {
+            Process proc = new Process();
+
+            try
+            {
+                proc.StartInfo.FileName = string.IsNullOrWhiteSpace(exePath)?"cmd.exe":exePath;
+
+                proc.StartInfo.Arguments = Arguments;  
+
+                // 配置Process对象
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardError = true; // FFMPEG的输出信息在错误流中
+                proc.StartInfo.CreateNoWindow = true; // 不打开窗口
+                //TimeSpan totalDuration = TimeSpan.Zero;
+                // 定义事件处理程序来读取输出信息
+                proc.OutputDataReceived += (sender, output) =>
+                {
+                    string? msg = output.Data;
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        BackFun(msg);
+                    }
+                };
+                proc.ErrorDataReceived += (sender, output) =>
+                {
+                    string? msg = output.Data;
+                    if (!string.IsNullOrEmpty(msg))
+                    {
+                        BackFun(msg);
+                    }
+                };
+
+                // 启动进程
+                proc.Start();
+                proc.BeginErrorReadLine(); // 开始异步读取错误流
+
+                // 等待进程完成
+                proc.WaitForExit();
+ 
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                // 清理资源
+                proc.Close();
+                proc.Dispose();
+            }
+
+            return string.Empty;
         }
     }
 }
