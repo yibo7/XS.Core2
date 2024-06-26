@@ -2030,6 +2030,10 @@ namespace XS.Core2
                     return true;
                 else if (string.Compare(expression, "false", true) == 0)
                     return false;
+                else if (expression == "1")
+                    return true;
+                else if (expression == "0")
+                    return false;
             }
             return defValue;
         }
