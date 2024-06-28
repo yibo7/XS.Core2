@@ -564,13 +564,28 @@ namespace XS.Core2
             var obj =  response.Content.ReadFromJsonAsync<T>().Result;
             return obj;
         }
-        public static string PostContentBackStr(string url, string Content)
+        public static string PostContentBackStr(string url, string Content, Dictionary<string, string>? Headers=null)
         {
             // 创建HttpClient对象
-            HttpClient httpClient = new HttpClient();
-
-            // 构造POST请求
+            HttpClient httpClient = new HttpClient(); 
             HttpContent requestContent = new StringContent(Content);
+
+            if(Headers != null)
+            {
+                if (Headers.ContainsKey("Content-Type"))
+                {
+                    requestContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Headers["Content-Type"]);
+                    Headers.Remove("Content-Type"); // 从字典中移除，避免再次添加
+                }
+
+                foreach (var kvp in Headers)
+                {
+                    requestContent.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value);
+                }
+            }
+
+            
+
             HttpResponseMessage response =  httpClient.PostAsync(url, requestContent).Result;
             // 读取响应数据
             var obj =  response.Content.ReadAsStringAsync().Result;
