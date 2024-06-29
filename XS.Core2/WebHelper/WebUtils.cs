@@ -568,19 +568,21 @@ namespace XS.Core2
         {
             // 创建HttpClient对象
             HttpClient httpClient = new HttpClient(); 
-            HttpContent requestContent = new StringContent(Content);
+            HttpContent requestContent = new StringContent(Content, Encoding.UTF8, "application/json");
 
             if(Headers != null)
             {
                 if (Headers.ContainsKey("Content-Type"))
                 {
-                    requestContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Headers["Content-Type"]);
+                    //requestContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Headers["Content-Type"]);
                     Headers.Remove("Content-Type"); // 从字典中移除，避免再次添加
-                }
+                } 
 
                 foreach (var kvp in Headers)
                 {
-                    requestContent.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value);
+                    httpClient.DefaultRequestHeaders.Add(kvp.Key, kvp.Value);
+
+                    //requestContent.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value);
                 }
             }
 
