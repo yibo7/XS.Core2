@@ -37,11 +37,11 @@ namespace XS.Core2.XsExtensions
 
         public static string SHA256(this string strSoure)
         {
-            return Md5Helper.SHA256(strSoure);
+            return Md5Helper.SHA_256(strSoure);
         }
         public static string Md5(this string strSoure,string privateKey="")
         {
-            return Md5Helper.MD5($"{strSoure}{privateKey}");
+            return Md5Helper.Md5Hash($"{strSoure}{privateKey}");
         }
         /// <summary>
         /// 通过换行符号将字符串分割成数组

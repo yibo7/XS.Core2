@@ -9,83 +9,98 @@ namespace XS.Core2.Encrypts
 {
     public class Md5Helper
     {
-
-        static bool Md5ObjComparer(object input, string hash)
+        // 比较字符串的MD5哈希值
+        public static bool VerifyMd5Hash(string input, string hash)
         {
-            // Hash the input.
-            string hashOfInput = MD5Obj(input);
-
-            // Create a StringComparer an compare the hashes.
+            string hashOfInput = Md5Hash(input);
             StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-
-            if (0 == comparer.Compare(hashOfInput, hash))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return 0 == comparer.Compare(hashOfInput, hash);
         }
-        // Verify a hash against a string.
-        static bool Md5Comparer(string input, string hash)
+
+        // 计算字符串的MD5哈希值
+        public static string Md5Hash(string input)
         {
-            // Hash the input.
-            string hashOfInput = MD5(input);
-
-            // Create a StringComparer an compare the hashes.
-            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-
-            if (0 == comparer.Compare(hashOfInput, hash))
+            using (MD5 md5 = MD5.Create())
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return sb.ToString();
             }
         }
 
-        /// <summary>
-        /// MD5函数
-        /// </summary>
-        /// <param name="str">原始字符串</param>
-        /// <returns>MD5结果</returns>
-        public static string MD5(string str)
+        // 计算对象的MD5哈希值
+        public static string Md5Hash(object obj)
         {
-            byte[] bytes = Encoding.Default.GetBytes(str);
-            bytes = new MD5CryptoServiceProvider().ComputeHash(bytes);
-            string text = "";
-            for (int i = 0; i < bytes.Length; i++)
+            byte[] b = ByteConvertHelper.Object2Bytes(obj); // 使用你的对象转字节数组的帮助类
+            using (MD5 md5 = MD5.Create())
             {
-                text += bytes[i].ToString("x").PadLeft(2, '0');
+                byte[] hashBytes = md5.ComputeHash(b);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return sb.ToString();
             }
-
-            return text;
         }
 
-        public static string MD5Obj(Object obj)
+        // 计算文件的MD5哈希值
+        public static string FileMd5Hash(string filePath)
         {
-            byte[] b = ByteConvertHelper.Object2Bytes(obj);
-            b = new MD5CryptoServiceProvider().ComputeHash(b);
-            string ret = "";
-            for (int i = 0; i < b.Length; i++)
-                ret += b[i].ToString("x").PadLeft(2, '0');
-
-            return ret;
+            using (MD5 md5 = MD5.Create())
+            {
+                using (FileStream file = new FileStream(filePath, FileMode.Open))
+                {
+                    byte[] hashBytes = md5.ComputeHash(file);
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < hashBytes.Length; i++)
+                    {
+                        sb.Append(hashBytes[i].ToString("x2"));
+                    }
+                    return sb.ToString();
+                }
+            }
         }
+
 
         /// <summary>
         /// SHA256函数
         /// </summary>
         /// /// <param name="str">原始字符串</param>
         /// <returns>SHA256结果</returns>
-        public static string SHA256(string str)
+        public static string SHA_256(string str)
         {
-            byte[] SHA256Data = Encoding.UTF8.GetBytes(str);
-            SHA256Managed Sha256 = new SHA256Managed();
-            byte[] Result = Sha256.ComputeHash(SHA256Data);
-            return Convert.ToBase64String(Result);  //返回长度为44字节的字符串
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] SHA256Data = Encoding.UTF8.GetBytes(str);
+                byte[] Result = sha256.ComputeHash(SHA256Data);
+                return Convert.ToBase64String(Result);  //返回长度为44字节的字符串
+            }
         }
     }
+
+    // 示例：对象转字节数组的帮助类 (你需要根据你的实际情况实现)
+    //public static class ByteConvertHelper
+    //{
+    //    public static byte[] Object2Bytes(object obj)
+    //    {
+    //        // 这里需要根据你的对象序列化方式来实现
+    //        // 例如：使用BinaryFormatter, Newtonsoft.Json等
+    //        // 这里只是一个示例，你需要替换为你的实际实现
+    //        //throw new NotImplementedException();
+    //        if (obj == null)
+    //        {
+    //            return new byte[0];
+    //        }
+
+    //        string str = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+    //        return Encoding.UTF8.GetBytes(str);
+    //    }
+    //}
 }

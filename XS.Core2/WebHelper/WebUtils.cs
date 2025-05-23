@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
+using System.Text; 
 using System.Text.RegularExpressions;
 using System.Web;
 using XS.Core2.FSO;
@@ -566,8 +566,12 @@ namespace XS.Core2
         }
         public static string PostContentBackStr(string url, string Content, Dictionary<string, string>? Headers=null)
         {
+            // 代码绕过证书
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
             // 创建HttpClient对象
-            HttpClient httpClient = new HttpClient(); 
+            HttpClient httpClient = new HttpClient(clientHandler); 
             HttpContent requestContent = new StringContent(Content, Encoding.UTF8, "application/json");
 
             if(Headers != null)
@@ -586,7 +590,6 @@ namespace XS.Core2
                 }
             }
 
-            
 
             HttpResponseMessage response =  httpClient.PostAsync(url, requestContent).Result;
             // 读取响应数据
