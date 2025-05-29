@@ -98,6 +98,7 @@ namespace XS.Core2.Strings
             string randomFileName = Path.GetRandomFileName().Replace(".", "");//某些情况下带点路径不兼用
             return string.Concat(dtDateTime.ToString("yyyyMMdd"), "/" + randomFileName + str);
         }
+
         public static string GetNewNameByDate(string OldFileName)
         {
             return GetNewNameByDate(OldFileName, DateTime.Now);
@@ -611,23 +612,31 @@ namespace XS.Core2.Strings
         }
         
         /// <summary>
-        /// 获得数字形式的随机字符串
+        /// 获取新的文件名，根据当前时间，精确到秒
         /// </summary>
         /// <returns>数字形式的随机字符串</returns>
-        public static string MakeFileName()
+        public static string MakeFileName(string oldFileName)
         {
-            int mikecat_intNum;
-            long mikecat_lngNum;
-            string mikecat_strNum = System.DateTime.Now.ToString();
-            mikecat_strNum = mikecat_strNum.Replace(":", "");
-            mikecat_strNum = mikecat_strNum.Replace("-", "");
-            mikecat_strNum = mikecat_strNum.Replace(" ", "");
-            mikecat_lngNum = long.Parse(mikecat_strNum);
-            System.Random mikecat_ran = new Random();
-            mikecat_intNum = mikecat_ran.Next(1, 99999);
-            mikecat_ran = null;
-            mikecat_lngNum += mikecat_intNum;
-            return mikecat_lngNum.ToString();
+            
+            // 获取当前时间，格式为 yyyyMMddHHmmss
+            string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            // 获取旧文件的扩展名（包括点号，例如 .txt）
+            string extension = Path.GetExtension(oldFileName);
+            // 拼接新的文件名
+            return $"{timestamp}{extension}";
+            //int mikecat_intNum;
+            //long mikecat_lngNum;
+            //string mikecat_strNum = System.DateTime.Now.ToString();
+            //mikecat_strNum = mikecat_strNum.Replace(":", "");
+            //mikecat_strNum = mikecat_strNum.Replace("-", "");
+            //mikecat_strNum = mikecat_strNum.Replace(" ", "");
+            //mikecat_lngNum = long.Parse(mikecat_strNum);
+            //System.Random mikecat_ran = new Random();
+            //mikecat_intNum = mikecat_ran.Next(1, 99999);
+            //mikecat_ran = null;
+            //mikecat_lngNum += mikecat_intNum;
+            //return mikecat_lngNum.ToString();
         }
         /// <summary>
         /// 获取服务器本机的MAC地址
