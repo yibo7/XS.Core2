@@ -130,32 +130,49 @@ namespace XS.Core2.FSO
         /// <param name="fileContent">文件内容.</param>
         /// <returns>System.String.</returns>
         /// <exception cref="System.Exception"></exception>
-        public static string WriteFileUtf8(string file, string fileContent)
+		public static string WriteFileUtf8(string file, string fileContent)
         {
             FileInfo f = new FileInfo(file);
-            // 如果文件所在的文件夹不存在则创建文件夹
-            if (!Directory.Exists(f.DirectoryName)) Directory.CreateDirectory(f.DirectoryName);
+            if (!Directory.Exists(f.DirectoryName))
+                Directory.CreateDirectory(f.DirectoryName);
 
-            FileStream fStream = new FileStream(file, FileMode.Create, FileAccess.Write);
-            StreamWriter sWriter = new StreamWriter(fStream, Encoding.UTF8);
+            // 使用 UTF8Encoding(false) 创建无 BOM 的编码器
+            var encoding = new UTF8Encoding(false);
 
-            try
+            using (var writer = new StreamWriter(file, false, encoding))
             {
-                sWriter.Write(fileContent);
-                return fileContent;
+                writer.Write(fileContent);
             }
-            catch (Exception exc)
-            {
-                throw new Exception(exc.ToString());
-            }
-            finally
-            {
-                sWriter.Flush();
-                fStream.Flush();
-                sWriter.Close();
-                fStream.Close();
-            }
+
+            return fileContent;
         }
+        //public static string WriteFileUtf8(string file, string fileContent)
+        //{
+        //    FileInfo f = new FileInfo(file);
+        //    // 如果文件所在的文件夹不存在则创建文件夹
+        //    if (!Directory.Exists(f.DirectoryName)) Directory.CreateDirectory(f.DirectoryName);
+
+        //    FileStream fStream = new FileStream(file, FileMode.Create, FileAccess.Write);
+        //    StreamWriter sWriter = new StreamWriter(fStream, Encoding.UTF8);
+
+        //    try
+        //    {
+        //        sWriter.Write(fileContent);
+        //        return fileContent;
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        throw new Exception(exc.ToString());
+        //    }
+        //    finally
+        //    {
+        //        sWriter.Flush();
+        //        fStream.Flush();
+        //        sWriter.Close();
+        //        fStream.Close();
+        //    }
+        //}
+
 
 
         /// <summary>
