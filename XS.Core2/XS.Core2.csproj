@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<VersionPrefix>2.1.0</VersionPrefix>
+	<VersionPrefix>2.1.1</VersionPrefix>
     <AssemblyTitle>XS.Core2 DLL</AssemblyTitle>
     <AssemblyDescription>XS.Core帮助类库</AssemblyDescription>
     <PackageOutputPath>D:\web\MyNugetLibs</PackageOutputPath>
