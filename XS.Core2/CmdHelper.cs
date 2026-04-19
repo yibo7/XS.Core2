@@ -124,6 +124,15 @@ namespace XS.Core2
             });
         }
 
+        static public void OpenFileSel(string FilePath)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", $"/select, \"{FilePath}\"");
+        }
+        static public void OpenFile(string FilePath)
+        {
+            Process.Start(new ProcessStartInfo(FilePath) { UseShellExecute = true });
+
+        }
         /// <summary>
         /// 执行cmd命令，并返回结果
         /// </summary>
